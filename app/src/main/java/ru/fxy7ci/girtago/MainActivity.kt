@@ -28,9 +28,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnSlide = findViewById(R.id.btnSlide)
-
-
-
+        clrCnt   = ColorCont(Color.BLUE)
+        btnSlide.setBackgroundColor(clrCnt.getColor())
         setGest()
 
 
@@ -82,8 +81,8 @@ class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
         distanceX: Float, distanceY: Float
     ): Boolean {
         Log.d("MyLog", "onScroll: " + distanceX.toString())
-        //clrCnt.acceptMove(distanceX)
-       // btnSlide.setBackgroundColor(clrCnt.getColor())
+        clrCnt.acceptMove(distanceX)
+        btnSlide.setBackgroundColor(clrCnt.getColor())
         return true
     }
 
