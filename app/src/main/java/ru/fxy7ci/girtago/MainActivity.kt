@@ -1,14 +1,23 @@
 package ru.fxy7ci.girtago
 
+import android.R.attr
+import android.annotation.SuppressLint
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Button
-import androidx.core.view.GestureDetectorCompat
+import androidx.appcompat.app.AppCompatActivity
+import android.R.attr.button
+import android.content.res.Resources
 
+import android.graphics.drawable.ColorDrawable
+import android.widget.ImageView
+import androidx.annotation.ColorInt
+
+
+lateinit var clrCnt: ColorCont
 lateinit var btnSlide: Button
 
 class MainActivity : AppCompatActivity() {
@@ -17,17 +26,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        btnSlide = findViewById(R.id.btnSlide)
+
+
+
         setGest()
+
+
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setGest() {
-        btnSlide = findViewById(R.id.btnSlide)
-        mDetector = GestureDetector(MyGestureListener())
+        mDetector = GestureDetector (MyGestureListener())
         btnSlide.setOnTouchListener { v, event ->
             mDetector.onTouchEvent(event)
         }
     }
+
+
+
 }
+
 
 
 class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
@@ -42,6 +62,7 @@ class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         Log.d("MyLog", "onSingleTapConfirmed: ")
+        btnSlide.setBackgroundColor(Color.BLUE)
         return true
     }
 
@@ -60,7 +81,9 @@ class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
         e1: MotionEvent, e2: MotionEvent,
         distanceX: Float, distanceY: Float
     ): Boolean {
-        Log.d("MyLog", "onScroll: ")
+        Log.d("MyLog", "onScroll: " + distanceX.toString())
+        //clrCnt.acceptMove(distanceX)
+       // btnSlide.setBackgroundColor(clrCnt.getColor())
         return true
     }
 
