@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnSlide = findViewById(R.id.btnSlide)
-        clrCnt   = ColorCont(Color.BLUE)
+        clrCnt   = ColorCont()
+//        clrCnt.setColor(R.color.myDefault)
         btnSlide.setBackgroundColor(clrCnt.getColor())
         setGest()
 
@@ -72,7 +73,8 @@ class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
         Log.d("MyLog", "onDoubleTap: ")
-        btnSlide.setBackgroundColor(Color.GREEN)
+        clrCnt.setDefault()
+        btnSlide.setBackgroundColor(clrCnt.getColor())
         return true
     }
 
@@ -80,8 +82,8 @@ class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
         e1: MotionEvent, e2: MotionEvent,
         distanceX: Float, distanceY: Float
     ): Boolean {
-        Log.d("MyLog", "onScroll: " + distanceX.toString())
-        clrCnt.acceptMove(distanceX)
+        clrCnt.moveHue(distanceX * 360 / btnSlide.width )
+        clrCnt.moveValue(distanceY / btnSlide.width )
         btnSlide.setBackgroundColor(clrCnt.getColor())
         return true
     }
