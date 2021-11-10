@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">GirTago</string>
+    <string name="stateName">TX State</string>
     <string-array name="txStateListStr">
         <item>Init</item>
         <item>Выбор</item>

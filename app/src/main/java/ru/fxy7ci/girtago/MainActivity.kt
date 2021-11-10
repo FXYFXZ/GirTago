@@ -3,12 +3,13 @@ package ru.fxy7ci.girtago
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 lateinit var clrCnt: ColorCont
@@ -16,7 +17,9 @@ lateinit var btnSlide: Button
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mDetector: GestureDetector
-    lateinit var txClass: TxThread
+    private lateinit var txClass: TxThread
+    private val mainHandler = Handler(Looper.getMainLooper())
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,25 +32,33 @@ class MainActivity : AppCompatActivity() {
         btnSlide = findViewById(R.id.btnSlide)
         clrCnt   = ColorCont()
         btnSlide.setBackgroundColor(clrCnt.getColor())
+
         setGest()
 
-//        val spinner :Spinner = findViewById(R.id.cbbTxState)
-//        ArrayAdapter.createFromResource( )
+        mainHandler.post(object : Runnable {
+            override fun run() {
+                showTxState()
+                mainHandler.postDelayed(this, 1000)
+            }
+        })
+
+    }
 
 
+    override fun onPause() {
+        mainHandler.removeCallbacksAndMessages(null)
+        super.onPause()
     }
 
     private fun showTxState(){
-        when (txClass.getState()) {
-            TxThread.State.INIT ->
+        val fldDtate : TextView = findViewById(R.id.fldState)
+        when (txClass.theTXState()) {
+            TxThread.State.INIT -> fldDtate.text = "Инициализация"
+            TxThread.State.ERROR -> fldDtate.text = "Ошибка"
+            TxThread.State.READY -> fldDtate.text = "Работа"
+            else -> fldDtate.text = "???"
         }
-
-
-
     }
-
-
-
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setGest() {
