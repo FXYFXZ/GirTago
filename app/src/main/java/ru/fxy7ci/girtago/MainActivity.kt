@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         // инициализация классов
         txClass = TxThread()
+      //  txClass.isDaemon = true
 
         showTxState()
         btnSlide = findViewById(R.id.btnSlide)
@@ -47,7 +48,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         mainHandler.removeCallbacksAndMessages(null)
+        txClass.getAppStopped()
         super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!txClass.toStop) txClass.start()
     }
 
     private fun showTxState(){
@@ -72,25 +79,22 @@ class MainActivity : AppCompatActivity() {
 
 class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
     override fun onDown(event: MotionEvent): Boolean {
-        Log.d("MyLog", "onDown: ")
-        // don't return false here or else none of the other
-        // gestures will work
+        //TODO запускаем отсчет
         return true
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        Log.d("MyLog", "onSingleTapConfirmed: ")
+        //TODO либо вставка либо toggle
         btnSlide.setBackgroundColor(Color.BLUE)
         return true
     }
 
     override fun onLongPress(e: MotionEvent) {
-        Log.d("MyLog", "onLongPress: ")
+        //TODO меню на компоненте
         btnSlide.setBackgroundColor(Color.RED)
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
-        Log.d("MyLog", "onDoubleTap: ")
         clrCnt.setDefault()
         btnSlide.setBackgroundColor(clrCnt.getColor())
         return true
@@ -110,7 +114,7 @@ class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
         event1: MotionEvent, event2: MotionEvent,
         velocityX: Float, velocityY: Float
     ): Boolean {
-        Log.d("MyLog", "onFling: ")
+//        Log.d("MyLog", "onFling: ")
         return true
     }
 }

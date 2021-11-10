@@ -1,26 +1,21 @@
 package ru.fxy7ci.girtago
 
-import android.os.CountDownTimer as CountDownTimer1
+import android.util.Log
 
 class TxThread: Thread() {
     var theTXState = State.INIT
-
+    var toStop = false
 
     override fun run() {
         super.run()
-        sleep(5000)
-        theTXState = State.READY
-    }
-    init {
-        val timer: CountDownTimer1(5000,1000){
-            override fun onFinish() {
-                theState = State.READY
-            }
+        toStop = false
+        Log.d("MyLog", "OnRun")
+        while (!toStop) {
+            sleep(5000)
+            theTXState = State.READY
+            Log.d("MyLog", "OnReady")
         }
-        timer.start()
-
     }
-
 
     fun theTXState(): State {
         return theTXState
@@ -31,5 +26,11 @@ class TxThread: Thread() {
         READY,
         ERROR
     }
+
+    fun getAppStopped() {
+        toStop = true
+    }
+
+
 
 }
