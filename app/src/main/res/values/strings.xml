@@ -8,4 +8,9 @@
         <item>Ошибка</item>
     </string-array>
 
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_send">Send</string>
+
+
 </resources>

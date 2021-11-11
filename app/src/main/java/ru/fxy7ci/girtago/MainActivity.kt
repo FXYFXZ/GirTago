@@ -13,6 +13,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.view.GestureDetector
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.TextView
@@ -102,6 +104,24 @@ class MainActivity : AppCompatActivity() {
         mBluetoothLeService = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.menu, menu)
+        //TODO поведение по доступности кнопок
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_connect -> mBluetoothLeService?.connect(StoreVals.DeviceAddress)
+            R.id.menu_disconnect -> mBluetoothLeService?.disconnect()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    //------------------------------------------------------ своё
+    //==============================================================================
+
+
     private fun showTxState(){
         val fldDtate : TextView = findViewById(R.id.fldState)
         when (txClass.theTXState()) {
@@ -111,6 +131,7 @@ class MainActivity : AppCompatActivity() {
             else -> fldDtate.text = "???"
         }
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setGest() {
