@@ -179,11 +179,15 @@ class MainActivity : AppCompatActivity() {
     // Code to manage Service lifecycle.
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, service: IBinder) {
-                (service as BluetoothLeService.LocalBinder).getService()
+            mBluetoothLeService = (service as BluetoothLeService.LocalBinder).getService()
+            // не работает как BluetoothLeService().LocalBinder().service
+
+            Log.d("MyLog", "got srv")
             if (!mBluetoothLeService!!.initialize()) {
                 finish()
             }
             // Automatically connects to the device upon successful start-up initialization.
+            Log.d("MyLog", "try connect ")
             mBluetoothLeService!!.connect(StoreVals.DeviceAddress)
         }
 
