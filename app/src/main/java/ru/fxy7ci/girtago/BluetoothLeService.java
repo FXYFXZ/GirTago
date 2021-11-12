@@ -33,6 +33,8 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     public BluetoothGatt mBluetoothGatt;
 
+    private BluetoothGattCharacteristic btChar;
+
     private int mConnectionState = StoreVals.STATE_DISCONNECTED;
 
     // intent strings
@@ -124,17 +126,35 @@ public class BluetoothLeService extends Service {
     // копаемся в службах и соединяемся с нужной характеристикой
     private void locateCharacteristic(){
         List<BluetoothGattService> gattServices = mBluetoothGatt.getServices();
+        if (gattServices==null) return;
+        for (BluetoothGattService gattService : gattServices){
+            //Log.d("MyLog", "Service:" + gattService.toString());
+            //типа "android.bluetooth.BluetoothGattService@e81fae4"
+            List<BluetoothGattCharacteristic> gattCharacteristics =
+                    gattService.getCharacteristics();
 
-
-
-
-
-
-
+            for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics){
+                Log.d("MyLog", "Char:" + gattCharacteristic.getUuid().toString());
+                //TODO правильное сравнение
+                if (gattCharacteristic.getUuid().toString().equals(StoreVals.BT_MAIN_CHR)){
+                    //Log.d("MyLog", "FoundChar!!!");
+                    btChar = gattCharacteristic;
+                    //TODO индикация
+                    return;
+                }
+            }
+        }
     }
 
+    // шлем данные при условии наличия характеристики
+    public void sendDataToBLM(byte[] myRGB){
+        if (btChar==null) return;
+        btChar.setValue(myRGB);
+        mBluetoothGatt.writeCharacteristic(btChar);
+        Log.d(TAG, "sent:" + myRGB.toString());
 
-
+        //TODO послали или нет
+    }
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);

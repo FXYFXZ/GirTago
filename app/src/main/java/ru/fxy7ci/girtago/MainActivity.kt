@@ -21,6 +21,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import ru.fxy7ci.girtago.BT.StoreVals
 
 lateinit var clrCnt: ColorCont
@@ -135,8 +138,16 @@ class MainActivity : AppCompatActivity() {
             StoreVals.STATE_CONNECTING -> fldBTState.text = "Connect..."
         }
 
+        if (txClass.theTXState == TxThread.State.READY) {
+            // собираем массив
+            val value = ByteArray(3)
+            val color = clrCnt.getColor()
+            value[0] = color.red.toByte()
+            value[1] = color.green.toByte()
+            value[2] = color.blue.toByte()
+            mBluetoothLeService!!.sendDataToBLM(value)
+        }
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setGest() {

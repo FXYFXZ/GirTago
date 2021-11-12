@@ -17,9 +17,9 @@ class TxThread: Thread() {
 
             toStop = false
             while (!toStop) {
-                sleep(1000)
+                sleep(5000)
                 theTXState = State.READY
-                Log.d("MyLog", "OnReady")
+              //  Log.d("MyLog", "OnReady")
             }
         }
     }

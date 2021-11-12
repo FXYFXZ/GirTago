@@ -1,6 +1,7 @@
 package ru.fxy7ci.girtago
 import android.graphics.Color
 import android.widget.Button
+import androidx.core.graphics.red
 
 /** Контейнер для работы с лампами
  * =============================== */
