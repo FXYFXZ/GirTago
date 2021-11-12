@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2013 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package ru.fxy7ci.girtago;
 
 import android.app.Service;
@@ -33,14 +17,13 @@ import android.util.Log;
 
 import java.util.List;
 
+import ru.fxy7ci.girtago.BT.StoreVals;
+
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
 public class BluetoothLeService extends Service {
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
 
     private final static String TAG = "MyLog";
             //BluetoothLeService.class.getSimpleName();
@@ -50,9 +33,9 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     public BluetoothGatt mBluetoothGatt;
 
-    private int mConnectionState = STATE_DISCONNECTED;
+    private int mConnectionState = StoreVals.STATE_DISCONNECTED;
 
-
+    // intent strings
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
@@ -96,18 +79,16 @@ public class BluetoothLeService extends Service {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
 
                 intentAction = ACTION_GATT_CONNECTED;
-                mConnectionState = STATE_CONNECTED;
+                mConnectionState = StoreVals.STATE_CONNECTED;
                 broadcastUpdate(intentAction);
 
-                Log.i(TAG, "Connected to GATT server.");
-                // Attempts to discover services after successful connection.
-                Log.i(TAG, "Attempting to start service discovery:");
+                Log.d(TAG, "Connected to GATT server.");
 
-                mBluetoothGatt.discoverServices(); // что у нас есть?
+                mBluetoothGatt.discoverServices(); // ===  что у нас есть? ===
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
-                mConnectionState = STATE_DISCONNECTED;
+                mConnectionState = StoreVals.STATE_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -116,6 +97,8 @@ public class BluetoothLeService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                // пришел список служб
+                locateCharacteristic();
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
@@ -137,6 +120,21 @@ public class BluetoothLeService extends Service {
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
+
+    // копаемся в службах и соединяемся с нужной характеристикой
+    private void locateCharacteristic(){
+        List<BluetoothGattService> gattServices = mBluetoothGatt.getServices();
+
+
+
+
+
+
+
+    }
+
+
+
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
@@ -183,9 +181,7 @@ public class BluetoothLeService extends Service {
 
     /**
      * Connects to the GATT server hosted on the Bluetooth LE device.
-     *
      * @param address The device address of the destination device.
-     *
      * @return Return true if the connection is initiated successfully. The connection result
      *         is reported asynchronously through the
      *         {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
@@ -202,7 +198,7 @@ public class BluetoothLeService extends Service {
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
-                mConnectionState = STATE_CONNECTING;
+                mConnectionState = StoreVals.STATE_CONNECTING;
                 return true;
             } else {
                 return false;
@@ -214,12 +210,13 @@ public class BluetoothLeService extends Service {
             Log.w(TAG, "Device not found.  Unable to connect.");
             return false;
         }
+
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         Log.d(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
-        mConnectionState = STATE_CONNECTING;
+        mConnectionState = StoreVals.STATE_CONNECTING;
         return true;
     }
 
@@ -253,7 +250,6 @@ public class BluetoothLeService extends Service {
      * Request a read on a given {@code BluetoothGattCharacteristic}. The read result is reported
      * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
      * callback.
-     *
      * @param characteristic The characteristic to read from.
      */
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
@@ -266,7 +262,6 @@ public class BluetoothLeService extends Service {
 
     /**
      * Enables or disables notification on a give characteristic.
-     *
      * @param characteristic Characteristic to act on.
      * @param enabled If true, enable notification.  False otherwise.
      */
@@ -297,4 +292,11 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) return null;
         return mBluetoothGatt.getServices();
     }
+
+    public int getConnectionState(){
+        return mConnectionState;
+    }
+
+
+
 }

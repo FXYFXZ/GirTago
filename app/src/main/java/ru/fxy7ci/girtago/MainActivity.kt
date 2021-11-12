@@ -3,7 +3,6 @@ package ru.fxy7ci.girtago
 import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothGattCharacteristic
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -18,6 +17,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,34 +26,33 @@ import ru.fxy7ci.girtago.BT.StoreVals
 lateinit var clrCnt: ColorCont
 lateinit var btnSlide: Button
 
-
 //TODO  добавить сканирование как в master(c уровнями сигналов)
 
-
 class MainActivity : AppCompatActivity() {
-
-    val BT_REQUEST_PERMISSION : Int = 89
-    private val mBluetoothAdapter: BluetoothAdapter? = null
     private lateinit var mDetector: GestureDetector
     private lateinit var txClass: TxThread
     private val mainHandler = Handler(Looper.getMainLooper())
 
     // все что относится к BT
     private var mBluetoothLeService: BluetoothLeService? = null
+    private val mBluetoothAdapter: BluetoothAdapter? = null
     private var mConnected = false
-        //bindService(gattServiceIntent, mServiceConnection, android.content.Context.BIND_AUTO_CREATE)
 
+    private lateinit var fldState : TextView
+    private lateinit var fldBTState : TextView
 
-
-
-
+    private var prevState = StoreVals.STATE_DISCONNECTED
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Интерфейс
+        fldState= findViewById(R.id.fldState)
+        fldBTState= findViewById(R.id.fldBTState)
+
         // получение всех разрешений
         getBtPermission()
-
 
         // инициализация классов
         txClass = TxThread()
@@ -123,13 +122,19 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showTxState(){
-        val fldDtate : TextView = findViewById(R.id.fldState)
         when (txClass.theTXState()) {
-            TxThread.State.INIT -> fldDtate.text = "Инициализация"
-            TxThread.State.ERROR -> fldDtate.text = "Ошибка"
-            TxThread.State.READY -> fldDtate.text = "Работа"
-            else -> fldDtate.text = "???"
+            TxThread.State.INIT -> fldState.text = "Инициализация"
+            TxThread.State.ERROR -> fldState.text = "Ошибка"
+            TxThread.State.READY -> fldState.text = "Работа"
+            else -> fldState.text = "???"
         }
+
+        when(mBluetoothLeService?.connectionState) {
+            StoreVals.STATE_DISCONNECTED -> fldBTState.text = "Disconnected"
+            StoreVals.STATE_CONNECTED -> fldBTState.text = "Connected"
+            StoreVals.STATE_CONNECTING -> fldBTState.text = "Connect..."
+        }
+
     }
 
 
@@ -152,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                BT_REQUEST_PERMISSION )
+                StoreVals.BT_REQUEST_PERMISSION )
         } else {
             Log.d("MyLog", "Permision granted")
         }
@@ -164,15 +169,11 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == BT_REQUEST_PERMISSION) {
+        if (requestCode == StoreVals.BT_REQUEST_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-         //       isPermissionGranted = true
+                Toast.makeText(this, "Разрешение получено", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions!!, grantResults)
         }
-
-
     }
 
 
@@ -180,9 +181,7 @@ class MainActivity : AppCompatActivity() {
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, service: IBinder) {
             mBluetoothLeService = (service as BluetoothLeService.LocalBinder).getService()
-            // не работает как BluetoothLeService().LocalBinder().service
-
-            Log.d("MyLog", "got srv")
+            //fln не работает как BluetoothLeService().LocalBinder().service
             if (!mBluetoothLeService!!.initialize()) {
                 finish()
             }
