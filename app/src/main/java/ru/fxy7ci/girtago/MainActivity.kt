@@ -139,12 +139,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (txClass.theTXState == TxThread.State.READY) {
-            // собираем массив
-            val value = ByteArray(3)
+
+
+            //TODO учимся работать со структурами
+
+            val value = ByteArray(6)
             val color = clrCnt.getColor()
-            value[0] = color.red.toByte()
+            value[0] = 3
             value[1] = color.green.toByte()
-            value[2] = color.blue.toByte()
+            value[2] = color.red.toByte()
+            value[3] = color.blue.toByte()
+            value[4] = 0xAB.toByte()
+            value[5] = 0xBA.toByte()
             mBluetoothLeService!!.sendDataToBLM(value)
         }
     }
