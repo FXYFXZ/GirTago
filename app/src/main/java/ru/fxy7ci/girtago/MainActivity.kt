@@ -79,9 +79,6 @@ class MainActivity : AppCompatActivity() {
         // TODO bluetooth enable
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter())
         //
-
-
-
     }
 
     override fun onPause() {
@@ -99,19 +96,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        //TODO поведение по доступности кнопок
+        mBluetoothLeService.let{
+            val isConnected = mConnected
+            menu?.findItem(R.id.menu_connect)?.isVisible = !isConnected
+            menu?.findItem(R.id.menu_disconnect)?.isVisible = isConnected
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_connect -> mBluetoothLeService?.connect(StoreVals.DeviceAddress)
-            R.id.menu_disconnect -> mBluetoothLeService?.disconnect()
+            R.id.menu_disconnect -> {
+                mBluetoothLeService?.disconnect()
+                mConnected = false
+                invalidateOptionsMenu()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 
     //------------------------------------------------------ своё
     //==============================================================================
@@ -143,16 +146,17 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        //TODO учимся работать со структурами
-//        val value = ByteArray(6)
-//        val color = clrCnt.getColor()
-//        value[0] = 3
-//        value[1] = color.green.toByte()
-//        value[2] = color.red.toByte()
-//        value[3] = color.blue.toByte()
-//        value[4] = 0xAB.toByte()
-//        value[5] = 0xBA.toByte()
-//        mBluetoothLeService!!.sendDataToBLM(value)
-
+        if (mConnected) {
+            val value = ByteArray(6)
+            val color = clrCnt.getColor()
+            value[0] = 3
+            value[1] = color.green.toByte()
+            value[2] = color.red.toByte()
+            value[3] = color.blue.toByte()
+            value[4] = 0xAB.toByte()
+            value[5] = 0xBA.toByte()
+            mBluetoothLeService!!.sendDataToBLM(value)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
