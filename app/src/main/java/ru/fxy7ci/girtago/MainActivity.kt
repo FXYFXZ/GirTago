@@ -2,7 +2,6 @@ package ru.fxy7ci.girtago
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -21,30 +20,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
-import androidx.core.graphics.red
 import ru.fxy7ci.girtago.BT.StoreVals
 
-lateinit var clrCnt: ColorCont
-lateinit var btnSlide: Button
 
 //TODO  добавить сканирование как в master(c уровнями сигналов)
 
 class MainActivity : AppCompatActivity() {
+    //lateinit var btnSlide: Button
+    lateinit var clrCnt: ColorCont
+    private val btnSlide: Button by lazy {findViewById(R.id.btnSlide)}
     private lateinit var mDetector: GestureDetector
-    private lateinit var txClass: TxThread
     private val mainHandler = Handler(Looper.getMainLooper())
 
     // все что относится к BT
     private var mBluetoothLeService: BluetoothLeService? = null
-    private val mBluetoothAdapter: BluetoothAdapter? = null
+    //private val mBluetoothAdapter: BluetoothAdapter? = null
     private var mConnected = false
 
     private lateinit var fldState : TextView
     private lateinit var fldBTState : TextView
-
-    private var prevState = StoreVals.STATE_DISCONNECTED
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,16 +51,11 @@ class MainActivity : AppCompatActivity() {
         // получение всех разрешений
         getBtPermission()
 
-        // инициализация классов
-        txClass = TxThread()
-        //  txClass.isDaemon = true
-
         val gattServiceIntent = Intent(this, BluetoothLeService::class.java)
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE)
 
 
         showTxState()
-        btnSlide = findViewById(R.id.btnSlide)
         clrCnt   = ColorCont()
         btnSlide.setBackgroundColor(clrCnt.getColor())
 
@@ -90,13 +79,11 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        if (!txClass.toStop) txClass.start()
     }
 
     override fun onPause() {
         super.onPause()
         mainHandler.removeCallbacksAndMessages(null)
-        txClass.getAppStopped()
         unregisterReceiver(mGattUpdateReceiver)
     }
 
@@ -107,7 +94,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.menu, menu)
         //TODO поведение по доступности кнопок
         return super.onCreateOptionsMenu(menu)
     }
@@ -125,40 +112,33 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showTxState(){
-        when (txClass.theTXState()) {
-            TxThread.State.INIT -> fldState.text = "Инициализация"
-            TxThread.State.ERROR -> fldState.text = "Ошибка"
-            TxThread.State.READY -> fldState.text = "Работа"
-            else -> fldState.text = "???"
-        }
 
         when(mBluetoothLeService?.connectionState) {
-            StoreVals.STATE_DISCONNECTED -> fldBTState.text = "Disconnected"
-            StoreVals.STATE_CONNECTED -> fldBTState.text = "Connected"
-            StoreVals.STATE_CONNECTING -> fldBTState.text = "Connect..."
+            StoreVals.STATE_DISCONNECTED -> fldBTState.text = getString(R.string.state_disconnected)
+            StoreVals.STATE_CONNECTED -> fldBTState.text = getString(R.string.state_connected)
+            StoreVals.STATE_CONNECTING -> fldBTState.text = getString(R.string.state_OnCconnect)
         }
 
-        if (txClass.theTXState == TxThread.State.READY) {
+//        //TODO учимся работать со структурами
+//        val value = ByteArray(6)
+//        val color = clrCnt.getColor()
+//        value[0] = 3
+//        value[1] = color.green.toByte()
+//        value[2] = color.red.toByte()
+//        value[3] = color.blue.toByte()
+//        value[4] = 0xAB.toByte()
+//        value[5] = 0xBA.toByte()
+//        mBluetoothLeService!!.sendDataToBLM(value)
 
-
-            //TODO учимся работать со структурами
-
-            val value = ByteArray(6)
-            val color = clrCnt.getColor()
-            value[0] = 3
-            value[1] = color.green.toByte()
-            value[2] = color.red.toByte()
-            value[3] = color.blue.toByte()
-            value[4] = 0xAB.toByte()
-            value[5] = 0xBA.toByte()
-            mBluetoothLeService!!.sendDataToBLM(value)
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setGest() {
-        mDetector = GestureDetector (MyGestureListener())
-        btnSlide.setOnTouchListener { v, event ->
+        mDetector =GestureDetector(this, MyGestureListener())
+
+
+            //GestureDetector (MyGestureListener())
+        btnSlide.setOnTouchListener { _, event ->
             mDetector.onTouchEvent(event)
         }
     }
@@ -169,8 +149,7 @@ class MainActivity : AppCompatActivity() {
         //TODO заодно включение адаптора
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            !== PackageManager.PERMISSION_GRANTED
-        ) {
+            != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -197,7 +176,7 @@ class MainActivity : AppCompatActivity() {
     // Code to manage Service lifecycle.
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(componentName: ComponentName, service: IBinder) {
-            mBluetoothLeService = (service as BluetoothLeService.LocalBinder).getService()
+            mBluetoothLeService = (service as BluetoothLeService.LocalBinder).service
             //fln не работает как BluetoothLeService().LocalBinder().service
             if (!mBluetoothLeService!!.initialize()) {
                 finish()
@@ -221,22 +200,26 @@ class MainActivity : AppCompatActivity() {
     //                        or notification operations.
     private val mGattUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            if (action == BluetoothLeService.ACTION_GATT_CONNECTED) {
-                mConnected = true
-                //TODO updateConnectionState(R.string.connected)
-                invalidateOptionsMenu()
-            } else if (action == BluetoothLeService.ACTION_GATT_DISCONNECTED) {
-                mConnected = false
-                //TODO updateConnectionState(R.string.disconnected)
-                //invalidateOptionsMenu()
-            } else if (action == BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED) {
-                // Show all the supported services and characteristics on the user interface.
-                //TODO    displayGattServices(mBluetoothLeService!!.supportedGattServices)
-            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-               //TODO displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA))
-                //val mBluetoothGattCharacteristic: BluetoothGattCharacteristic? = null
-                // тут пришли данные
+            when (intent.action) {
+                BluetoothLeService.ACTION_GATT_CONNECTED -> {
+                    mConnected = true
+                    //TODO updateConnectionState(R.string.connected)
+                    invalidateOptionsMenu()
+                }
+                BluetoothLeService.ACTION_GATT_DISCONNECTED -> {
+                    mConnected = false
+                    //TODO updateConnectionState(R.string.disconnected)
+                    //invalidateOptionsMenu()
+                }
+                BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED -> {
+                    // Show all the supported services and characteristics on the user interface.
+                    //TODO    displayGattServices(mBluetoothLeService!!.supportedGattServices)
+                }
+//                BluetoothLeService.ACTION_DATA_AVAILABLE -> {
+//                    //TODO displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA))
+//                    //val mBluetoothGattCharacteristic: BluetoothGattCharacteristic? = null
+//                    // тут пришли данные
+//                }
             }
         }
     }
@@ -251,6 +234,52 @@ class MainActivity : AppCompatActivity() {
         return intentFilter
     }
 
+
+    inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
+        override fun onDown(event: MotionEvent): Boolean {
+            //TODO запускаем отсчет
+            return true
+        }
+
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+            //TODO либо вставка либо toggle
+            btnSlide.setBackgroundColor(Color.BLUE)
+            return true
+        }
+
+        override fun onLongPress(e: MotionEvent) {
+            //TODO меню на компоненте
+            btnSlide.setBackgroundColor(Color.RED)
+        }
+
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            clrCnt.setDefault()
+            btnSlide.setBackgroundColor(clrCnt.getColor())
+            return true
+        }
+
+        override fun onScroll(
+            e1: MotionEvent, e2: MotionEvent,
+            distanceX: Float, distanceY: Float
+        ): Boolean {
+            clrCnt.moveHue((distanceX * (ColorCont.MAX_HUE/3)  / btnSlide.width)*-1)
+            clrCnt.moveValue(distanceY / btnSlide.width )
+            btnSlide.setBackgroundColor(clrCnt.getColor())
+            return true
+        }
+
+        override fun onFling(
+            event1: MotionEvent, event2: MotionEvent,
+            velocityX: Float, velocityY: Float
+        ): Boolean {
+//        Log.d("MyLog", "onFling: ")
+            return true
+        }
+    }
+
+
+
+
 }
 // END CLASS
 
@@ -261,45 +290,3 @@ class MainActivity : AppCompatActivity() {
 
 
 
-class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
-    override fun onDown(event: MotionEvent): Boolean {
-        //TODO запускаем отсчет
-        return true
-    }
-
-    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-        //TODO либо вставка либо toggle
-        btnSlide.setBackgroundColor(Color.BLUE)
-        return true
-    }
-
-    override fun onLongPress(e: MotionEvent) {
-        //TODO меню на компоненте
-        btnSlide.setBackgroundColor(Color.RED)
-    }
-
-    override fun onDoubleTap(e: MotionEvent): Boolean {
-        clrCnt.setDefault()
-        btnSlide.setBackgroundColor(clrCnt.getColor())
-        return true
-    }
-
-    override fun onScroll(
-        e1: MotionEvent, e2: MotionEvent,
-        distanceX: Float, distanceY: Float
-    ): Boolean {
-        clrCnt.moveHue(distanceX * (ColorCont.MAX_HUE/2)  / btnSlide.width )
-        clrCnt.moveValue(distanceY / btnSlide.width )
-        btnSlide.setBackgroundColor(clrCnt.getColor())
-        return true
-    }
-
-    override fun onFling(
-        event1: MotionEvent, event2: MotionEvent,
-        velocityX: Float, velocityY: Float
-    ): Boolean {
-//        Log.d("MyLog", "onFling: ")
-        return true
-    }
-
-}

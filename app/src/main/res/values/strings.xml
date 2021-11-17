@@ -12,5 +12,10 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_send">Send</string>
 
+    <string name="state_connected">Connected</string>
+    <string name="state_disconnected">Disconnected</string>
+    <string name="state_OnCconnect">Connect…</string>
+
+
 
 </resources>

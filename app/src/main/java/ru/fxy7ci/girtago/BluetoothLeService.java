@@ -134,10 +134,10 @@ public class BluetoothLeService extends Service {
                     gattService.getCharacteristics();
 
             for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics){
-                Log.d("MyLog", "Char:" + gattCharacteristic.getUuid().toString());
+//                Log.d("MyLog", "Char:" + gattCharacteristic.getUuid().toString());
                 //TODO правильное сравнение
                 if (gattCharacteristic.getUuid().toString().equals(StoreVals.BT_MAIN_CHR)){
-                    //Log.d("MyLog", "FoundChar!!!");
+                    Log.d("MyLog", "FoundChar!!!");
                     btChar = gattCharacteristic;
                     //TODO индикация
                     return;
@@ -151,7 +151,7 @@ public class BluetoothLeService extends Service {
         if (btChar==null) return;
         btChar.setValue(myRGB);
         mBluetoothGatt.writeCharacteristic(btChar);
-        Log.d(TAG, "sent:" + myRGB.toString());
+        Log.d(TAG, "sent");
 
         //TODO послали или нет
     }
