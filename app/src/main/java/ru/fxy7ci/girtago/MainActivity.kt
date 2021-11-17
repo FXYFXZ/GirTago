@@ -21,6 +21,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import ru.fxy7ci.girtago.BT.StoreVals
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 
 
 //TODO  добавить сканирование как в master(c уровнями сигналов)
@@ -54,9 +57,9 @@ class MainActivity : AppCompatActivity() {
         val gattServiceIntent = Intent(this, BluetoothLeService::class.java)
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE)
 
-
         showTxState()
-        clrCnt   = ColorCont()
+
+        setColorClass()
         btnSlide.setBackgroundColor(clrCnt.getColor())
 
         setGest()
@@ -82,6 +85,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        savePreferences()
         super.onPause()
         mainHandler.removeCallbacksAndMessages(null)
         unregisterReceiver(mGattUpdateReceiver)
@@ -107,9 +111,28 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+
+
     //------------------------------------------------------ своё
     //==============================================================================
 
+    private fun setColorClass(){
+        val sharedPreferences = getSharedPreferences(StoreVals.APP_PREFERENCES , MODE_PRIVATE)
+        val myRed = sharedPreferences.getInt("RED", 127)
+        val myGreen = sharedPreferences.getInt("GREEN", 127)
+        val myBlue = sharedPreferences.getInt("BLUE", 127)
+        clrCnt   = ColorCont(myRed,myGreen,myBlue)
+    }
+
+    private fun savePreferences(){
+        val sharedPreferences = getSharedPreferences(StoreVals.APP_PREFERENCES , MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val color = clrCnt.getColor()
+        editor.putInt("RED", color.red)
+        editor.putInt("GREEN",color.green)
+        editor.putInt("BLUE",color.blue)
+        editor.apply()
+    }
 
     private fun showTxState(){
 
@@ -243,7 +266,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             //TODO либо вставка либо toggle
-            btnSlide.setBackgroundColor(Color.BLUE)
+//            btnSlide.setBackgroundColor(Color.BLUE)
             return true
         }
 

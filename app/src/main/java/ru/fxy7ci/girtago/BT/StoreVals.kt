@@ -5,6 +5,7 @@ package ru.fxy7ci.girtago.BT
 class StoreVals {
 
     companion object {
+        const val APP_PREFERENCES = "myAppSettings"
         const val DeviceAddress = "88:25:83:F1:1D:07" //MAC
         const val BT_REQUEST_PERMISSION : Int = 89
 

@@ -6,12 +6,17 @@ import androidx.core.graphics.red
 /** Контейнер для работы с лампами
  * =============================== */
 
-class ColorCont {
+class ColorCont(myRed: Int, myGreen: Int, myBlue: Int) {
 
     private var hsv = FloatArray(3)
     init {
         setDefault()
     }
+
+    init {
+        Color.colorToHSV(Color.rgb(myRed,myGreen,myBlue), hsv)
+    }
+
     // Ставим значение по умолчанию
     fun setDefault(){
         Color.colorToHSV(Color.rgb(0,80,80), hsv)
