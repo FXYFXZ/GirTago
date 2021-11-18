@@ -2,6 +2,9 @@ package ru.fxy7ci.girtago
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,13 +13,11 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import android.view.GestureDetector
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
+import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,11 +30,16 @@ import androidx.core.graphics.red
 //TODO  добавить сканирование как в master(c уровнями сигналов)
 
 class MainActivity : AppCompatActivity() {
-    //lateinit var btnSlide: Button
+    private var myAppState: AppState = AppState.AP_LOAD
     lateinit var clrCnt: ColorCont
     private val btnSlide: Button by lazy {findViewById(R.id.btnSlide)}
     private lateinit var mDetector: GestureDetector
     private val mainHandler = Handler(Looper.getMainLooper())
+    // насыщенность
+    private val btnH1: Button by lazy {findViewById(R.id.btnHue25)}
+    private val btnH2: Button by lazy {findViewById(R.id.btnHue50)}
+    private val btnH3: Button by lazy {findViewById(R.id.btnHue75)}
+    private val btnH4: Button by lazy {findViewById(R.id.btnHue100)}
 
     // все что относится к BT
     private var mBluetoothLeService: BluetoothLeService? = null
@@ -70,7 +76,21 @@ class MainActivity : AppCompatActivity() {
                 mainHandler.postDelayed(this, 1000)
             }
         })
+
+        btnH1.setOnClickListener (hueClick)
+        btnH2.setOnClickListener (hueClick)
+        btnH3.setOnClickListener (hueClick)
+        btnH4.setOnClickListener (hueClick)
     }
+
+    private val hueClick = View.OnClickListener {
+
+        val newSat = (it as Button).tag.toString().toFloat()
+        clrCnt.settSaturation(newSat)
+        btnSlide.setBackgroundColor(clrCnt.getColor())
+//        Log.d("MyLog", "Hue" + it.tag)
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -101,6 +121,7 @@ class MainActivity : AppCompatActivity() {
             menu?.findItem(R.id.menu_connect)?.isVisible = !isConnected
             menu?.findItem(R.id.menu_disconnect)?.isVisible = isConnected
         }
+        menu?.findItem(R.id.menu_btOff)?.isVisible = (myAppState ==AppState.AP_BT_PROBLEM)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -173,18 +194,40 @@ class MainActivity : AppCompatActivity() {
 
     // Get All permissions
     private fun getBtPermission() {
-        //TODO заодно включение адаптора
-
+        myAppState = AppState.AP_BT_PROBLEM
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 StoreVals.BT_REQUEST_PERMISSION )
-        } else {
-            Log.d("MyLog", "Permision granted")
+        }
+
+        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
+        // fire an intent to display a dialog asking the user to grant permission to enable it.
+        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+        // BluetoothAdapter through BluetoothManager.
+        val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+        val mBluetoothAdapter: BluetoothAdapter = bluetoothManager.adapter
+
+        val getResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == Activity.RESULT_OK){
+//                val value = it.data?.getStringExtra("input")
+                Toast.makeText(this, "BLU ON!!!", Toast.LENGTH_SHORT).show()
+                //TODO перегрузка соединений
+                invalidateOptionsMenu()
+            }
+        }
+        if (!mBluetoothAdapter.isEnabled) {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            getResult.launch(enableBtIntent)
+        }
+        else{
+            myAppState = AppState.AP_DISCONNET
         }
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -269,18 +312,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-            //TODO либо вставка либо toggle
 //            btnSlide.setBackgroundColor(Color.BLUE)
             return true
         }
 
         override fun onLongPress(e: MotionEvent) {
             //TODO меню на компоненте
-            btnSlide.setBackgroundColor(Color.RED)
+            clrCnt.setDefault()
+            btnSlide.setBackgroundColor(clrCnt.getColor())
         }
 
         override fun onDoubleTap(e: MotionEvent): Boolean {
-            clrCnt.setDefault()
+            clrCnt.setOff()
             btnSlide.setBackgroundColor(clrCnt.getColor())
             return true
         }
@@ -304,7 +347,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    enum class AppState {
+        AP_LOAD,
+        AP_BT_PROBLEM,
+        AP_PERMISION,
+        AP_DISCONNET,
+        AP_CONNECT
+    }
 
 
 }

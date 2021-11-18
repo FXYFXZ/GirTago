@@ -13,7 +13,7 @@ class StoreVals {
         const val STATE_DISCONNECTED = 0
         const val STATE_CONNECTING = 1
         const val STATE_CONNECTED = 2
-
+        // характеристика для передачи BLE
         const val BT_MAIN_CHR = "0000ffe1-0000-1000-8000-00805f9b34fb"
 
     }

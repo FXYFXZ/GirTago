@@ -15,4 +15,12 @@
         android:title="@string/menu_disconnect"
         app:showAsAction="ifRoom|withText" />
 
+    <item
+        android:id="@+id/menu_btOff"
+        android:icon="@drawable/ic_bluetooth_disabled"
+        android:orderInCategory="101"
+        android:title="@string/menu_disconnect"
+        app:showAsAction="ifRoom|withText" />
+
+
 </menu>
