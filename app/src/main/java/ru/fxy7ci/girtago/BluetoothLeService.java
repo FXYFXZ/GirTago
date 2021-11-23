@@ -23,6 +23,7 @@ import ru.fxy7ci.girtago.BT.StoreVals;
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
+
 public class BluetoothLeService extends Service {
 
     private final static String TAG = "MyLog";
@@ -292,14 +293,6 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-
-        // This is specific to Heart Rate Measurement.
-//        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
-//            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-//                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-//            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-//            mBluetoothGatt.writeDescriptor(descriptor);
-//        }
     }
 
     /**
@@ -316,7 +309,5 @@ public class BluetoothLeService extends Service {
     public int getConnectionState(){
         return mConnectionState;
     }
-
-
 
 }
