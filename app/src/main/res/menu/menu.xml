@@ -3,24 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_connect"
-        android:icon="@drawable/ic_connect"
         android:orderInCategory="100"
         android:title="@string/menu_connect"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_disconnect"
-        android:icon="@drawable/ic_disconnect"
-        android:orderInCategory="101"
-        android:title="@string/menu_disconnect"
-        app:showAsAction="ifRoom|withText" />
-
-    <item
-        android:id="@+id/menu_btOff"
-        android:icon="@drawable/ic_bluetooth_disabled"
-        android:orderInCategory="101"
-        android:title="@string/menu_disconnect"
-        app:showAsAction="ifRoom|withText" />
 
 
 </menu>
