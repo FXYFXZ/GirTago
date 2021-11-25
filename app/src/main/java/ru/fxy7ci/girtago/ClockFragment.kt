@@ -1,14 +1,16 @@
 package ru.fxy7ci.girtago
 
-import android.os.Bundle
+import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 
 /**
  * A simple [Fragment] subclass.
  */
 class ClockFragment : Fragment(R.layout.fragment_clock) {
+
+    var relativeLayout = findViewById(R.id.container) as RelativeLayout
+
+
+
 
 }
