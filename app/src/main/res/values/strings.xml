@@ -15,7 +15,8 @@
     <string name="state_connected">Connected</string>
     <string name="state_disconnected">Disconnected</string>
     <string name="state_OnCconnect">Connect…</string>
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

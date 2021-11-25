@@ -25,10 +25,39 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         // Интерфейс
+        val firstFragment = ClockFragment()
+        val settingsFragment = SettingsFragment()
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, firstFragment)
+            commit()
+        }
+
+        val btnCl: Button = findViewById(R.id.btnFragment1)
+        val btnC2: Button = findViewById(R.id.btnFragment2)
+
+        btnCl.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.flFragment, firstFragment)
+                commit()
+            }
+        }
+
+        btnC2.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.flFragment, settingsFragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
+
+
 
     }
 
