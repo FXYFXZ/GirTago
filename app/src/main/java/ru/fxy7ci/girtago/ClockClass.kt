@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
 
-private class Rectangle(context: Context?) : View(context) {
+private class MyRectangle(context: Context?) : View(context) {
     var paint = Paint()
     override fun onDraw(canvas: Canvas) {
         paint.color = Color.GREEN

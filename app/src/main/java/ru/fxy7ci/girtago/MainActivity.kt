@@ -2,15 +2,17 @@ package ru.fxy7ci.girtago
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import ru.fxy7ci.girtago.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         // Интерфейс
         val firstFragment = ClockFragment()
         val settingsFragment = SettingsFragment()
@@ -19,26 +21,20 @@ class MainActivity : AppCompatActivity() {
             commit()
         }
 
-        val btnCl: Button = findViewById(R.id.btnFragment1)
-        val btnC2: Button = findViewById(R.id.btnFragment2)
-
-        btnCl.setOnClickListener {
+        binding.btnFragment1.setOnClickListener {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.flFragment, firstFragment)
                 commit()
             }
         }
 
-        btnC2.setOnClickListener {
+        binding.btnFragment2.setOnClickListener {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.flFragment, settingsFragment)
                 addToBackStack(null)
                 commit()
             }
         }
-
-
-
 
     }
 
