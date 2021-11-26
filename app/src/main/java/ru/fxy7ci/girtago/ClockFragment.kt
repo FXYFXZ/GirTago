@@ -1,10 +1,5 @@
 package ru.fxy7ci.girtago
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,18 +14,18 @@ import ru.fxy7ci.girtago.databinding.FragmentClockBinding
 class ClockFragment : Fragment(R.layout.fragment_clock) {
     private var _binding: FragmentClockBinding? = null
     private val binding get() = _binding!!
-    lateinit var myClock : MyClock
+    private lateinit var myClock : MyClock
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentClockBinding.inflate(inflater,container, false)
 
-        binding.btnNext.setOnClickListener(View.OnClickListener {
+        binding.btnNext.setOnClickListener {
             myClock.setMyDate(2f)
-        })
+        }
         return binding.root
     }
 

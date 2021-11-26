@@ -13,6 +13,8 @@
     <color name="h50">#80018786</color>
     <color name="h75">#A0018786</color>
     <color name="h100">#FF018786</color>
+    <color name="ClockBack">#20FF40FF</color>
+    <color name="ClockSun">#FF1100</color>
 
 
 </resources>
