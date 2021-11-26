@@ -31,7 +31,7 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     }
 
     override fun onResume() {
-        binding.tvFirstFragment.text = "Hare Krishna"
+        binding.tvFirstFragment.text = "26.11.2021"
         super.onResume()
     }
 
