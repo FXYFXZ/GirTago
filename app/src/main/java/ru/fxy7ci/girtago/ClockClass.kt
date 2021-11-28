@@ -19,52 +19,58 @@ class MyClock(context: Context?) : View(context) {
     //шняга
     private var myAngel = 10f
 
-
-
-
-
-
-
     override fun onDraw(canvas: Canvas) {
         mainRadius = width/2.toFloat()
         canvas.translate(mainRadius, mainRadius)
         theCanvas = canvas
-        drawSun()
+        drawSun((180+20).toFloat(), (360-20).toFloat())
+        drawMoon(90f, 290f)
         drawHand(myAngel)
 
-//        paint.color = Color.GREEN
-//        val rect = Rect(100, 255, 200, 300)
-//        canvas.drawRect(rect, paint)
     }
 
     // inners---------------------------------------------------------------------------------------
 
-
-
-
-    private fun drawSun(){
+    // Солнце по старту и концу уголы
+    private fun drawSun(myStart: Float, myEnd: Float){
         // Suno ------------------------------------------------------------------------
         // циферблат
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = sunWidth
+        paint.strokeWidth = sunWidth*0.7f
         paint.color = ResourcesCompat.getColor(resources, R.color.ClockNight,null)
         theCanvas.drawCircle(centerX,centerY, mainRadius-sunWidth/2,paint)
 
-
+        paint.style = Paint.Style.STROKE
         paint.color = ResourcesCompat.getColor(resources, R.color.ClockSun,null)
         paint.strokeWidth = sunWidth
         paint.style = Paint.Style.STROKE
         val theRect = RectF(-(mainRadius-sunWidth/2), -(mainRadius-sunWidth/2),
             mainRadius-sunWidth/2, mainRadius-sunWidth/2)
-        val sAup   = 180f+30f
-        val sAdown = 180f-2*30
-
-//        val sunRect = scaleRectByVal(theRect, -sunWidth)
-        theCanvas.drawArc(theRect, sAup,sAdown,  false, paint)
-
+         drawMyArc(myStart, myEnd,  theRect)
     }
 
+    // Рисуем дугу текущим цветом по началу и концу
+    private fun drawMyArc(myStart: Float, myEnd: Float, myRect: RectF){
+        val cAng = 360f
+        val angDlit: Float
+        if (myEnd > myStart) {
+            angDlit = myEnd - myStart
+        }
+        else {
+            angDlit = cAng-myStart + myEnd
+        }
+        theCanvas.drawArc(myRect, myStart ,angDlit,  false, paint)
+    }
 
+    private fun drawMoon(myStart: Float, myEnd: Float){
+        paint.style = Paint.Style.STROKE
+        paint.color = ResourcesCompat.getColor(resources, R.color.ClockMoon,null)
+        paint.strokeWidth = sunWidth*0.9f
+        val moonRad :Float = mainRadius*0.8f
+//z       val theRect = RectF(-1*moonRad, -1*moonRad, 0f, 0f)
+        val mnRect = RectF(-moonRad,-moonRad,moonRad,moonRad)
+        drawMyArc(myStart, myEnd, mnRect)
+    }
 
     private fun drawHand(myAng: Float){
         // Ось
@@ -88,12 +94,6 @@ class MyClock(context: Context?) : View(context) {
     }
 
 
-    private fun drawMoon(){
-
-    }
-
-
-
 
     // Export
     fun setMyDate(myRad: Float){
@@ -102,22 +102,7 @@ class MyClock(context: Context?) : View(context) {
     }
 
 
-
-
-
-
-
-
-
-
 } // CLASS------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 
 // to Lib ------------------------------------------------------------------------------------------
