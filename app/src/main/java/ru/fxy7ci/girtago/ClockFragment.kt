@@ -64,8 +64,8 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
 //        val timeFormat: DateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 //        val timeText: String = timeFormat.format(currentDate)
 
-        binding.tvFirstFragment.text = dateText
-
+        binding.tvDateTime.text = dateText
+        binding.tvJDay.text = 151654654.toString()
     }
 
 
