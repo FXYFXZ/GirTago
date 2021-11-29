@@ -47,6 +47,7 @@ class MyClock(context: Context?) : View(context) {
         val theRect = RectF(-(mainRadius-sunWidth/2), -(mainRadius-sunWidth/2),
             mainRadius-sunWidth/2, mainRadius-sunWidth/2)
          drawMyArc(myStart, myEnd,  theRect)
+
     }
 
     // Рисуем дугу текущим цветом по началу и концу
