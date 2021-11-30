@@ -1,15 +1,13 @@
 package ru.fxy7ci.girtago
 
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ru.fxy7ci.girtago.AstroLib.StarTimes
+import ru.fxy7ci.girtago.astroLib.StarTimes
 import ru.fxy7ci.girtago.databinding.FragmentClockBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class ClockFragment : Fragment(R.layout.fragment_clock) {

@@ -1,4 +1,4 @@
-package ru.fxy7ci.girtago.AstroLib
+package ru.fxy7ci.girtago.astroLib
 
 typealias TJD = Double
 typealias TJD2K = Double
