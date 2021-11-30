@@ -1,5 +1,6 @@
 package ru.fxy7ci.girtago.astroLib
 import ru.fxy7ci.girtago.astroLib.AstroControls.*
+import java.util.*
 import kotlin.math.*
 
 
@@ -271,44 +272,68 @@ fun getJulianDay(date: ln_date): TJD {
 }
 
 fun getDateFromJD(mjd: TJD): ln_date {
-
-    val z: Int
-    val jd: Double = mjd + 2400000.5 + 0.5 // if a JDN is passed as argument,
-    // omit the 2400000.5 term
-
-    var x: Double
-
-    z = floor(jd).toInt()
-    var f: Double = jd - z
-    val a :Int = if (z >= 2299161) {
-        val alpha = floor((z - 1867216.25) / 36524.25).toInt()
-        z + 1 + alpha - floor((alpha / 4).toDouble()).toInt()
-    } else z
-    val b: Int = a + 1524
-    val c: Int = floor((b   - 122.1) / 365.25).toInt()
-    val d: Int = floor(365.25 * c).toInt()
-    val e: Int = floor((b - d) / 30.6001).toInt()
     val result = ln_date()
-    result.days = (b - d - floor(30.6001 * e).toInt()).toByte()
-    result.months = if (e<14) (e-1).toByte() else (e-13).toByte()
-    result.years = if(result.months>2) (c-4716).toShort()  else (c-4715).toShort()
+    var l = mjd.toInt() + 68569
+    val n = 4 * l / 146097
+    l -= (146097 * n + 3) / 4
+    val i = 4000 * (l + 1) / 1461001
+    l = l - 1461 * i / 4 + 31
+    val j = 80 * l / 2447
+    val d = l - 2447 * j / 80
+    l = j / 11
+    val m = j + 2 - 12 * l
+    val y = 100 * (n - 49) + i + l
 
-    f *= 24.0
-    x = floor(f)
-    result.hours = x.toInt().toByte()
-    f -= x
+    val fraction: Double = mjd - floor(mjd)
+    val dHours = fraction * 24.0
+    val hours = dHours.toInt()
+    val dMinutes = (dHours - hours) * 60.0
+    val minutes = dMinutes.toInt()
+    val seconds: Int = ((dMinutes - minutes) * 60.0).toInt()
 
-    f *= 60.0
-    x = floor(f)
-    result.minutes = x.toInt().toByte()
-    f -= x
-
-    f *= 60.0
-    x = floor(f)
-    result.seconds = x.toInt().toByte()
+    result.years = y.toShort()
+    result.months = m.toByte()
+    result.days = d.toByte()
+    result.hours =  ((hours +12)%24).toByte()
+    result.minutes = minutes.toByte()
+    result.seconds = seconds.toByte()
 
     return result
 }
+
+//val z: Int
+//val jd: Double = mjd + 2400000.5 + 0.5 // if a JDN is passed as argument,
+//// omit the 2400000.5 term
+//
+//var x: Double
+//
+//z = floor(jd).toInt()
+//var f: Double = jd - z
+//val a :Int = if (z >= 2299161) {
+//    val alpha = floor((z - 1867216.25) / 36524.25).toInt()
+//    z + 1 + alpha - floor((alpha / 4).toDouble()).toInt()
+//} else z
+//val b: Int = a + 1524
+//val c: Int = floor((b   - 122.1) / 365.25).toInt()
+//val d: Int = floor(365.25 * c).toInt()
+//val e: Int = floor((b - d) / 30.6001).toInt()
+//result.days = (b - d - floor(30.6001 * e).toInt()).toByte()
+//result.months = if (e<14) (e-1).toByte() else (e-13).toByte()
+//result.years = if(result.months>2) (c-4716).toShort()  else (c-4715).toShort()
+//
+//f *= 24.0
+//x = floor(f)
+//result.hours = x.toInt().toByte()
+//f -= x
+//
+//f *= 60.0
+//x = floor(f)
+//result.minutes = x.toInt().toByte()
+//f -= x
+//
+//f *= 60.0
+//x = floor(f)
+//result.seconds = x.toInt().toByte()
 
 
 // void GetMoonPosition (const ln_date *date, TCoords lat, TCoords lng, TMoonPosition * Result){
