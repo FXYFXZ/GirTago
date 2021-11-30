@@ -1,5 +1,6 @@
-package ru.fxy7ci.girtago.astroLib
+package ru.fxy7ci.girtago.astroLib.Astroclass
 
+import ru.fxy7ci.girtago.astroLib.AstroControls.*
 import kotlin.math.*
 
 // Расчет событий восхода и захода солнца и луны
@@ -31,8 +32,8 @@ fun astroSetSunTimes(date: ln_date, lat: TCoords, lng: TCoords) {
 
     theStarTimes.Noon = solarTransitJ(ds, m, l) // Полдень на юлианский день
     val h : Double = SUN_CONST[TSunTimes.SST_SET.ordinal] as Double
-    theStarTimes.SunSet  = getSetJ(h * D2R, lw, phi, dec, m, l, n)
-    theStarTimes.SunRise = theStarTimes.Noon - (theStarTimes.SunSet - theStarTimes.Noon)
+    theStarTimes.sunSet  = getSetJ(h * D2R, lw, phi, dec, m, l, n)
+    theStarTimes.sunRise = theStarTimes.Noon - (theStarTimes.sunSet - theStarTimes.Noon)
 }
 
 fun astroSetMoonTimes(date: ln_date, lat: TCoords, lng: TCoords){

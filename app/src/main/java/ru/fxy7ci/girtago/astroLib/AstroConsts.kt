@@ -1,4 +1,4 @@
-package ru.fxy7ci.girtago.astroLib
+package ru.fxy7ci.girtago.astroLib.AstroControls
 
 typealias TJD = Double
 typealias TJD2K = Double
@@ -15,8 +15,8 @@ val J2000 =  2451545  // Юлианский день 2000 г.
 public class StarTimes {
     public var isSet: Boolean = false
     var Noon : TJD = 0.0 // Время полудня
-    var SunRise : TJD = 0.0 //  время восхода солнца
-    var SunSet : TJD = 0.0 //  время захода солнца
+    var sunRise : TJD = 0.0 //  время восхода солнца
+    var sunSet : TJD = 0.0 //  время захода солнца
     var moonState = TMoonState.SMN_ALWSUP
     var moonRise: TJD = 0.0 // время восхода луны
     var moonSet: TJD = 0.0  // время захода луны
