@@ -1,6 +1,8 @@
 package ru.fxy7ci.girtago.AstroLib
 
 typealias TJD = Double
+typealias TJD2K = Double
+typealias TCoords = Double
 
 // В настройки потом...
 val ECHO_JMT = 0.125   // коррекция на время по гринвичу + 3 / 24
@@ -15,6 +17,12 @@ public class StarTimes {
     var Noon : TJD = 0.0 // Время полудня
     var SunRise : TJD = 0.0 //  время восхода солнца
     var SunSet : TJD = 0.0 //  время захода солнца
+    var moonState = TMoonState.SMN_ALWSUP
+    var moonRise: TJD = 0.0 // время восхода луны
+    var moonSet: TJD = 0.0  // время захода луны
+    var MoonFraction = 0f
+    var MoonPhase = 0f// Фаза луны
+    var MoonAngle = 0f
 }
 
 public class ln_date  {
@@ -24,4 +32,25 @@ public class ln_date  {
     public var hours: Byte = 0     /*!< Hours. Valid values 0 - 23. */
     public var minutes: Byte = 0   /*!< Minutes. Valid values 0 - 59. */
     public var seconds: Byte = 0   /*!< Seconds. Valid values 0 - 59*/
+}
+
+public class TObjCoords {
+    public var ra: Double = 0.0
+    public var dec: Double = 0.0
+    public var dist: Double = 0.0
+}
+
+enum class TMoonState {
+    SMN_UPDOWN, // UpDown восходит и заходит
+    SMN_ALWSUP, // AlwaysUp не заходит
+    SMN_ALWSDN  // AlwaysDown не восходит
+}
+
+enum class TSunTimes {
+    SST_SET,    // sunset
+    SST_STRT,   // sunsetStart
+    SST_DUSK,   // dusk
+    SST_NDUSK,  // nauticalDusk
+    SST_NGT,    // night
+    SST_GHR     // goldenHour
 }
