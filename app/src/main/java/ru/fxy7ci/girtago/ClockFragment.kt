@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import ru.fxy7ci.girtago.astroLib.AstroControls.TJD
 import ru.fxy7ci.girtago.astroLib.AstroControls.ln_date
-import ru.fxy7ci.girtago.astroLib.Astroclass.*
+import ru.fxy7ci.girtago.astroLib.astroSetSunTimes
+import ru.fxy7ci.girtago.astroLib.getDateFromJD
+import ru.fxy7ci.girtago.astroLib.theStarTimes
 import ru.fxy7ci.girtago.databinding.FragmentClockBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -70,11 +73,18 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
 //        val timeText: String = timeFormat.format(currentDate)
 
         binding.tvDateTime.text = dateText
-        binding.tvJDay.text = "-"
-        binding.tvSunRise.text = theStarTimes.sunRise.toString()
-        binding.SunNoon.text = theStarTimes.Noon.toString()
-        binding.SunSet.text = theStarTimes.sunSet.toString()
+
+        binding.tvSunRise.text = printTimeFromJD(theStarTimes.sunRise)
+        binding.SunNoon.text = printTimeFromJD(theStarTimes.Noon)
+        binding.SunSet.text = printTimeFromJD(theStarTimes.sunSet)
     }
+
+
+private fun printTimeFromJD(myTime:TJD): String{
+    val lnDate = getDateFromJD(myTime + StoreVals.LOCAL_JMT)
+    return lnDate.hours.toString() + ":" + lnDate.minutes.toString()
+}
+
 
 
 

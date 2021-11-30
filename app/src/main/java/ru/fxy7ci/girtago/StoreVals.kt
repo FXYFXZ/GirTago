@@ -7,7 +7,7 @@ class StoreVals {
 
         const val LATITUDE = 55.433   // текущая широта
         const val LONGITUDE = 37.552  // текущая долгота
-
+        const val LOCAL_JMT = 0.125   // коррекция на время по гринвичу + 3 / 24
     }
 
 }
