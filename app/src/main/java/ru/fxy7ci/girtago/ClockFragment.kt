@@ -49,16 +49,17 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     }
 
     private fun iniCals(){
-        val currentDate = Date()
         val theDate = ln_date()
-        theDate.days = currentDate.day.toByte()
-        theDate.months = currentDate.month.toByte()
-        theDate.years = currentDate.year.toShort()
-        theDate.hours = currentDate.hours.toByte()
-        theDate.minutes = currentDate.minutes.toByte()
-        theDate.seconds = currentDate.seconds.toByte()
+        val rightNow = Calendar.getInstance()
+        theDate.days  = rightNow.get(Calendar.DATE).toByte()
+        theDate.months = (rightNow.get(Calendar.MONTH)+1).toByte()
+        theDate.years = rightNow.get(Calendar.YEAR).toShort()
+        var hours = rightNow.get(Calendar.HOUR)
+        if (rightNow.get(Calendar.AM_PM)==Calendar.PM) hours += 12
+        theDate.hours = hours.toByte()
+        theDate.minutes = rightNow.get(Calendar.MINUTE).toByte()
+        theDate.seconds = rightNow.get(Calendar.SECOND).toByte()
         astroSetSunTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
-
     }
 
     // Отображаем актуальное текущее время
