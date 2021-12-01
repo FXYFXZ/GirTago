@@ -29,7 +29,7 @@ class MyClock(context: Context?) : View(context) {
 
 
         drawSun(getAngFromJul(theStarTimes.sunRise), getAngFromJul(theStarTimes.sunSet))
-        drawMoon(getAngFromJul(theStarTimes.moonRise), getAngFromJul(theStarTimes.sunSet))
+        drawMoon(getAngFromJul(theStarTimes.moonRise), getAngFromJul(theStarTimes.moonSet))
         drawHand()
 
     }
@@ -37,12 +37,12 @@ class MyClock(context: Context?) : View(context) {
     // inners---------------------------------------------------------------------------------------
     //
     private fun getAngFromJul(myJD : TJD): Float {
-        var res = myJD - theStarTimes.noon + 0.5
+        var res = myJD - theStarTimes.noon
         res -= floor(res)
         if (res<0) res += 1
         if (res>1) res -= 1
         res *= 360f
-        res += 90
+        res -= 90
         res %= 360
         return res.toFloat()
     }
@@ -96,14 +96,15 @@ class MyClock(context: Context?) : View(context) {
         val hWidth = sunWidth*1.5.toFloat()
         theCanvas.drawCircle(centerX,centerY, hWidth, paint)
 
-        // стрелка
+        // стрелка >-
         theCanvas.save()
-      //TODO  theCanvas.rotate(-1*getAngFromJul(theStarTimes.JD))
+//        theCanvas.rotate(getAngFromJul(theStarTimes.noon))
+        theCanvas.rotate(getAngFromJul(theStarTimes.JD-0.125))
         val pt = Path()
         pt.reset()
-        pt.moveTo(-hWidth*0.7f, 0f)
-        pt.lineTo(0f, -(mainRadius-sunWidth))
-        pt.lineTo(hWidth*0.7f, 0f)
+        pt.moveTo(0f,hWidth*0.7f)
+        pt.lineTo((mainRadius-sunWidth), 0f)
+        pt.lineTo(0f, -hWidth*0.7f)
         pt.close()
         theCanvas.drawPath(pt,paint)
         theCanvas.restore()

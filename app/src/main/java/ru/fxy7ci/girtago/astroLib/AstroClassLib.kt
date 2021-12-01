@@ -19,11 +19,13 @@ private val SUN_CONST = arrayOf(-0.833, -0.3, -0.6, -12, -18, 6)
 // переменная главного расчета
 var theStarTimes = StarTimes()
 
+//TODO единая функция вычисляющая всё
+
 fun astroSetSunTimes(date: ln_date, lat: TCoords, lng: TCoords) {
     val dec: Double; val n: Short
     val lw = D2R * -lng
     val phi = D2R * lat
-
+    theStarTimes.JD = getJulianDay(date)
     val d  = toDays(date)
     n  = julianCycle(d, lw) // здесь теряем своё время, оставляем только дату
     val ds = approxTransit(0.0, lw, n)
