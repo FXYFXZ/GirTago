@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import ru.fxy7ci.girtago.astroLib.AstroControls.TJD
 import ru.fxy7ci.girtago.astroLib.theStarTimes
+import kotlin.math.floor
 
 class MyClock(context: Context?) : View(context) {
     // Внутренние переменные
@@ -19,7 +20,6 @@ class MyClock(context: Context?) : View(context) {
     private val centerY = 0f
 
     //шняга
-    private var myAngel = 10f
 
     override fun onDraw(canvas: Canvas) {
         mainRadius = width/2.toFloat()
@@ -28,23 +28,24 @@ class MyClock(context: Context?) : View(context) {
         if (!theStarTimes.isSet) return // данные ещё не готовы
 
 
-        drawSun((180+20).toFloat(), (360-20).toFloat())
-        drawMoon(90f, 290f)
-        drawHand(myAngel)
+        drawSun(getAngFromJul(theStarTimes.sunRise), getAngFromJul(theStarTimes.sunSet))
+        drawMoon(getAngFromJul(theStarTimes.moonRise), getAngFromJul(theStarTimes.sunSet))
+        drawHand()
 
     }
 
     // inners---------------------------------------------------------------------------------------
-
-
+    //
     private fun getAngFromJul(myJD : TJD): Float {
-        val noon = theStarTimes.noon
-
-
-        return 0f
+        var res = myJD - theStarTimes.noon + 0.5
+        res -= floor(res)
+        if (res<0) res += 1
+        if (res>1) res -= 1
+        res *= 360f
+        res += 90
+        res %= 360
+        return res.toFloat()
     }
-
-
 
     // Солнце по старту и концу уголы
     private fun drawSun(myStart: Float, myEnd: Float){
@@ -88,7 +89,7 @@ class MyClock(context: Context?) : View(context) {
         drawMyArc(myStart, myEnd, mnRect)
     }
 
-    private fun drawHand(myAng: Float){
+    private fun drawHand(){
         // Ось
         paint.style = Paint.Style.FILL
         paint.color = ResourcesCompat.getColor(resources, R.color.ClockHand,null)
@@ -97,7 +98,7 @@ class MyClock(context: Context?) : View(context) {
 
         // стрелка
         theCanvas.save()
-        theCanvas.rotate(-myAng)
+      //TODO  theCanvas.rotate(-1*getAngFromJul(theStarTimes.JD))
         val pt = Path()
         pt.reset()
         pt.moveTo(-hWidth*0.7f, 0f)
@@ -113,7 +114,7 @@ class MyClock(context: Context?) : View(context) {
 
     // Export
     fun setMyDate(myRad: Float){
-        myAngel += 10f
+//        myAngel += 10f
         invalidate()
     }
 

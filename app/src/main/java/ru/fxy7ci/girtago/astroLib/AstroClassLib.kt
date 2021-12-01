@@ -1,4 +1,5 @@
 package ru.fxy7ci.girtago.astroLib
+import ru.fxy7ci.girtago.StoreVals
 import ru.fxy7ci.girtago.astroLib.AstroControls.*
 import kotlin.math.*
 
@@ -162,7 +163,7 @@ fun astroSetMoonIllumination(myDate: ln_date){
 // Subs ============================================================================================
 
 private fun toDays(myDate: ln_date): TJD2K {
-    return (getJulianDay(myDate) - ECHO_JMT - J2000 )
+    return (getJulianDay(myDate) - StoreVals.LOCAL_JMT - J2000 )
 }
 
 private fun julianCycle(d: Double, lw:Double): Short {

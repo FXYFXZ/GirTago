@@ -9,6 +9,7 @@ const val J2000 =  2451545  // Юлианский день 2000 г.
 
 class StarTimes {
     var isSet: Boolean = false
+    var JD : TJD = 0.0
     var noon : TJD = 0.0 // Время полудня
     var sunRise : TJD = 0.0 //  время восхода солнца
     var sunSet : TJD = 0.0 //  время захода солнца
