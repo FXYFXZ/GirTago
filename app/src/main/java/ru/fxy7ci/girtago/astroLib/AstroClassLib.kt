@@ -1,6 +1,5 @@
 package ru.fxy7ci.girtago.astroLib
 import ru.fxy7ci.girtago.astroLib.AstroControls.*
-import java.util.*
 import kotlin.math.*
 
 
@@ -31,10 +30,10 @@ fun astroSetSunTimes(date: ln_date, lat: TCoords, lng: TCoords) {
     val l  = eclipticLongitude(m)
     dec = declination(l, 0.0)
 
-    theStarTimes.Noon = solarTransitJ(ds, m, l) // Полдень на юлианский день
+    theStarTimes.noon = solarTransitJ(ds, m, l) // Полдень на юлианский день
     val h : Double = SUN_CONST[TSunTimes.SST_SET.ordinal] as Double
     theStarTimes.sunSet  = getSetJ(h * D2R, lw, phi, dec, m, l, n)
-    theStarTimes.sunRise = theStarTimes.Noon - (theStarTimes.sunSet - theStarTimes.Noon)
+    theStarTimes.sunRise = theStarTimes.noon - (theStarTimes.sunSet - theStarTimes.noon)
 }
 
 fun astroSetMoonTimes(date: ln_date, lat: TCoords, lng: TCoords){
@@ -151,12 +150,12 @@ fun astroSetMoonIllumination(myDate: ln_date){
     inc = atan2(sdist * sin(phi), mc.dist - sdist * cos(phi))
     angle = atan2(cos(sc.dec) * sin(sc.ra - mc.ra), sin(sc.dec) * cos(mc.dec) -
             cos(sc.dec) * sin(mc.dec) * cos(sc.ra - mc.ra))
-    theStarTimes.MoonFraction = ((1 + cos(inc)) / 2).toFloat()
-    theStarTimes.MoonAngle = angle.toFloat()
+    theStarTimes.moonFraction = ((1 + cos(inc)) / 2).toFloat()
+    theStarTimes.moonAngle = angle.toFloat()
     if (angle < 0)
-        theStarTimes.MoonPhase = (0.5 + 0.5 * inc * -1  / PI).toFloat()
+        theStarTimes.moonPhase = (0.5 + 0.5 * inc * -1  / PI).toFloat()
     else
-        theStarTimes.MoonPhase = (0.5 + 0.5 * inc  / PI).toFloat()
+        theStarTimes.moonPhase = (0.5 + 0.5 * inc  / PI).toFloat()
 }
 
 

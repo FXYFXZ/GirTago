@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import ru.fxy7ci.girtago.astroLib.*
 import ru.fxy7ci.girtago.astroLib.AstroControls.TJD
 import ru.fxy7ci.girtago.astroLib.AstroControls.ln_date
-import ru.fxy7ci.girtago.astroLib.astroSetSunTimes
-import ru.fxy7ci.girtago.astroLib.getDateFromJD
-import ru.fxy7ci.girtago.astroLib.theStarTimes
 import ru.fxy7ci.girtago.databinding.FragmentClockBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,6 +58,9 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
         theDate.minutes = rightNow.get(Calendar.MINUTE).toByte()
         theDate.seconds = rightNow.get(Calendar.SECOND).toByte()
         astroSetSunTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
+        astroSetMoonTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
+        //astroSetMoonIllumination(theDate)
+        theStarTimes.isSet = true
     }
 
     // Отображаем актуальное текущее время
@@ -74,10 +75,11 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
 //        val timeText: String = timeFormat.format(currentDate)
 
         binding.tvDateTime.text = dateText
+        val sfmt = "S: ${printTimeFromJD(theStarTimes.sunRise)} - ${printTimeFromJD(theStarTimes.sunSet)}"
+        binding.tv1.text = sfmt
+        val lfmt = "L: ${printTimeFromJD(theStarTimes.moonRise)} - ${printTimeFromJD(theStarTimes.moonSet)} "
+        binding.tv2.text = lfmt
 
-        binding.tvSunRise.text = printTimeFromJD(theStarTimes.sunRise)
-        binding.SunNoon.text = printTimeFromJD(theStarTimes.Noon)
-        binding.SunSet.text = printTimeFromJD(theStarTimes.sunSet)
     }
 
 

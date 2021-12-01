@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import ru.fxy7ci.girtago.astroLib.AstroControls.TJD
+import ru.fxy7ci.girtago.astroLib.theStarTimes
 
 class MyClock(context: Context?) : View(context) {
     // Внутренние переменные
@@ -23,6 +25,9 @@ class MyClock(context: Context?) : View(context) {
         mainRadius = width/2.toFloat()
         canvas.translate(mainRadius, mainRadius)
         theCanvas = canvas
+        if (!theStarTimes.isSet) return // данные ещё не готовы
+
+
         drawSun((180+20).toFloat(), (360-20).toFloat())
         drawMoon(90f, 290f)
         drawHand(myAngel)
@@ -30,6 +35,16 @@ class MyClock(context: Context?) : View(context) {
     }
 
     // inners---------------------------------------------------------------------------------------
+
+
+    private fun getAngFromJul(myJD : TJD): Float {
+        val noon = theStarTimes.noon
+
+
+        return 0f
+    }
+
+
 
     // Солнце по старту и концу уголы
     private fun drawSun(myStart: Float, myEnd: Float){
