@@ -26,11 +26,11 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
         binding.btnNext.setOnClickListener {
             myClock.setMyDate(2f)
         }
-        iniCals() // Инициализация расчета
         return binding.root
     }
 
     override fun onResume() {
+        iniCals() // Инициализация расчета
         printDates()
         super.onResume()
     }
@@ -57,7 +57,6 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
         theDate.hours = hours.toByte()
         theDate.minutes = rightNow.get(Calendar.MINUTE).toByte()
         theDate.seconds = rightNow.get(Calendar.SECOND).toByte()
-        //TODO на единую функцию
         astroSetSunTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
         astroSetMoonTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
         //astroSetMoonIllumination(theDate)
@@ -86,8 +85,7 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
 
 private fun printTimeFromJD(myTime:TJD): String{
     val lnDate = getDateFromJD(myTime + StoreVals.LOCAL_JMT)
-    return lnDate.hours.toString().padStart(2, '0') +
-            ":" + lnDate.minutes.toString().padStart(2, '0')
+    return lnDate.hours.toString() + ":" + lnDate.minutes.toString()
 }
 
 
