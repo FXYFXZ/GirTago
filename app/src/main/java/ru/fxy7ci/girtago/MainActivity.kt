@@ -53,9 +53,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun savePreferences(){
 //        val sharedPreferences = getSharedPreferences(StoreVals.APP_PREFERENCES , MODE_PRIVATE)
 //        val editor = sharedPreferences.edit()

@@ -1,4 +1,5 @@
 <resources>
+    <!-- Rusia  -->
     <string name="app_name">GirTago</string>
     <string name="menu_settings">Настройки</string>
     <string name="sett_loco">Город</string>
