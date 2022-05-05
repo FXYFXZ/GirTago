@@ -6,4 +6,10 @@
     <string name="menu_latitude">Широта</string>
     <string name="menu_longitude">Долгота</string>
     <string name="menu_timezone">Часовой пояс</string>
+
+    <string name="menu_btn_day_before">назад</string>
+    <string name="menu_btn_day_after">вперед</string>
+
+
+
 </resources>

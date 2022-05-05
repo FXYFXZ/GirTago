@@ -35,7 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="Солнце 123456" />
 
         <TextView
             android:id="@+id/tvSunTimes"
@@ -52,11 +53,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/tv4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="12ewfe" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDayBefore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="@string/menu_btn_day_before" />
+
+            <Button
+                android:id="@+id/btnDayAfter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="@string/menu_btn_day_after" />
+        </LinearLayout>
 
     </LinearLayout>
 
