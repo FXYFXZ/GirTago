@@ -19,8 +19,11 @@ class MainActivity : AppCompatActivity() {
         val firstFragment = ClockFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, firstFragment)
-            commit()
+            commit() // switch
         }
+
+        // что насчет сетпа
+
     }
 
     override fun onPause() {

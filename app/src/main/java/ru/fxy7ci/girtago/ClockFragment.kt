@@ -23,9 +23,11 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     ): View {
         _binding = FragmentClockBinding.inflate(inflater,container, false)
 
-        binding.btnNext.setOnClickListener {
-            myClock.setMyDate(2f)
-        }
+//        binding.btnNext.setOnClickListener {
+//            myClock.setMyDate(2f)
+//        }
+
+
         return binding.root
     }
 
@@ -76,9 +78,9 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
 
         binding.tvDateTime.text = dateText
         val sfmt = "S: ${printTimeFromJD(theStarTimes.sunRise)} - ${printTimeFromJD(theStarTimes.sunSet)}"
-        binding.tv1.text = sfmt
+       // binding.tv1.text = sfmt
         val lfmt = "L: ${printTimeFromJD(theStarTimes.moonRise)} - ${printTimeFromJD(theStarTimes.moonSet)} "
-        binding.tv2.text = lfmt
+       // binding.tv2.text = lfmt
 
     }
 
