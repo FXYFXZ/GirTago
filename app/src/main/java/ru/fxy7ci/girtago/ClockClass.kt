@@ -114,10 +114,14 @@ class MyClock(context: Context?) : View(context) {
 
 
     // Export
-    fun setMyDate(myRad: Float){
-//        myAngel += 10f
-        invalidate()
+    fun gotoDayB4(myCnt: Int) {
+        
+
+
+
+
     }
+
 
 
 } // CLASS------------------------------------------------------------------------------------------

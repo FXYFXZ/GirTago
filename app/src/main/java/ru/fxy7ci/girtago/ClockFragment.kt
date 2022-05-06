@@ -16,12 +16,21 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     private var _binding: FragmentClockBinding? = null
     private val binding get() = _binding!!
     private lateinit var myClock : MyClock
+    private val theDateCalendar = Calendar.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentClockBinding.inflate(inflater,container, false)
+
+        binding.btnDayBefore.setOnClickListener{
+            theDateCalendar.add(Calendar.DATE,-1)
+            myClock.gotoDayB4(1)
+
+        }
+
+
 
 //        binding.btnNext.setOnClickListener {
 //            myClock.setMyDate(2f)
@@ -50,15 +59,16 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
 
     private fun iniCals(){
         val theDate = ln_date()
-        val rightNow = Calendar.getInstance()
-        theDate.days  = rightNow.get(Calendar.DATE).toByte()
-        theDate.months = (rightNow.get(Calendar.MONTH)+1).toByte()
-        theDate.years = rightNow.get(Calendar.YEAR).toShort()
-        var hours = rightNow.get(Calendar.HOUR)
-        if (rightNow.get(Calendar.AM_PM)==Calendar.PM) hours += 12
+
+        theDate.days  = theDateCalendar.get(Calendar.DATE).toByte()
+        theDate.months = (theDateCalendar.get(Calendar.MONTH)+1).toByte()
+        theDate.years = theDateCalendar.get(Calendar.YEAR).toShort()
+        var hours = theDateCalendar.get(Calendar.HOUR)
+        if (theDateCalendar.get(Calendar.AM_PM)==Calendar.PM) hours += 12
         theDate.hours = hours.toByte()
-        theDate.minutes = rightNow.get(Calendar.MINUTE).toByte()
-        theDate.seconds = rightNow.get(Calendar.SECOND).toByte()
+        theDate.minutes = theDateCalendar.get(Calendar.MINUTE).toByte()
+        theDate.seconds = theDateCalendar.get(Calendar.SECOND).toByte()
+
         astroSetSunTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
         astroSetMoonTimes(theDate, StoreVals.LATITUDE, StoreVals.LONGITUDE)
         //astroSetMoonIllumination(theDate)
