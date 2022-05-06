@@ -25,14 +25,16 @@ class MyClock(context: Context?) : View(context) {
         mainRadius = width/2.toFloat()
         canvas.translate(mainRadius, mainRadius)
         theCanvas = canvas
+        forceRedraw()
+    }
+
+    fun forceRedraw(){
         if (!theStarTimes.isSet) return // данные ещё не готовы
-
-
         drawSun(getAngFromJul(theStarTimes.sunRise), getAngFromJul(theStarTimes.sunSet))
         drawMoon(getAngFromJul(theStarTimes.moonRise), getAngFromJul(theStarTimes.moonSet))
         drawHand()
-
     }
+
 
     // inners---------------------------------------------------------------------------------------
     //
@@ -112,26 +114,13 @@ class MyClock(context: Context?) : View(context) {
     }
 
 
-
-    // Export
-    fun gotoDayB4(myCnt: Int) {
-        
-
-
-
-
-    }
-
-
-
 } // CLASS------------------------------------------------------------------------------------------
 
-
 // to Lib ------------------------------------------------------------------------------------------
-fun scaleRectByVal(myRect: RectF, myVal: Float): RectF {
-    myRect.left -= myVal
-    myRect.top  -= myVal
-    myRect.bottom += myVal
-    myRect.right += myVal
-    return myRect
-}
+//fun scaleRectByVal(myRect: RectF, myVal: Float): RectF {
+//    myRect.left -= myVal
+//    myRect.top  -= myVal
+//    myRect.bottom += myVal
+//    myRect.right += myVal
+//    return myRect
+//}
