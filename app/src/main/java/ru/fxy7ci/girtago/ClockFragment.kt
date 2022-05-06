@@ -1,5 +1,6 @@
 package ru.fxy7ci.girtago
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,13 +28,18 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     ): View {
         _binding = FragmentClockBinding.inflate(inflater,container, false)
 
+        // Controls events
         binding.btnDayBefore.setOnClickListener{
             theDateCalendar.add(Calendar.DATE,-1)
             reCalcuate(); printDates()
             myClock.invalidate() // Update
         }
 
-
+        binding.btnDayAfter.setOnClickListener{
+            theDateCalendar.add(Calendar.DATE,1)
+            reCalcuate(); printDates()
+            myClock.invalidate() // Update
+        }
 
         return binding.root
     }
@@ -73,37 +79,19 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     }
 
     // Отображаем актуальное текущее время
+    @SuppressLint("SimpleDateFormat")
     private fun printDates() {
-        val currentDate =  Date()
-// Форматирование времени как "день.месяц.год"
-//        val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-//        val dateText: String = dateFormat.format(currentDate)
-
-
-
         val format = SimpleDateFormat("dd.MM.yyyy HH:mm")
-        val dateText: String = format.format(theDateCalendar.time)
-
-
-// Форматирование времени как "часы:минуты:секунды"
-//        val timeFormat: DateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-//        val timeText: String = timeFormat.format(currentDate)
-
-        binding.tvDateTime.text = dateText
+        binding.tvDateTime.text = format.format(theDateCalendar.time)
         val sfmt = "S: ${printTimeFromJD(theStarTimes.sunRise)} - ${printTimeFromJD(theStarTimes.sunSet)}"
-       // binding.tv1.text = sfmt
+        binding.tvSunTimes.text = sfmt
         val lfmt = "L: ${printTimeFromJD(theStarTimes.moonRise)} - ${printTimeFromJD(theStarTimes.moonSet)} "
-       // binding.tv2.text = lfmt
-
+        binding.tvMoonTimes.text = lfmt
     }
-
 
 private fun printTimeFromJD(myTime:TJD): String{
     val lnDate = getDateFromJD(myTime + StoreVals.LOCAL_JMT)
     return lnDate.hours.toString() + ":" + lnDate.minutes.toString()
 }
-
-
-
 
 } // CLASS =========================================================================================

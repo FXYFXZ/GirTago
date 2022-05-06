@@ -43,24 +43,15 @@
             android:id="@+id/tvSunTimes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="08:56 - 18:15" />
+
         <TextView
             android:id="@+id/tvMoonTimes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/tv4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textSize="20sp"
-            tools:text="12ewfe" />
+            tools:text="01:23 - 23:33" />
 
         <LinearLayout
             android:layout_width="match_parent"
