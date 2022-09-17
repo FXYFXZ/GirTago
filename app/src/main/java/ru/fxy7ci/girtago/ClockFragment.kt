@@ -1,6 +1,7 @@
 package ru.fxy7ci.girtago
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,9 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
     override fun onResume() {
         reCalcuate() // Инициализация расчета
         printDates()
+
+        //+++ берем настройки
+
         super.onResume()
     }
 

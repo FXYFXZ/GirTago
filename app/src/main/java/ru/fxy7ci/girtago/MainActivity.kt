@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         // что насчет сетпа
+//        val res = resources
+//        res.getXml(R.xml.test)
+
+
 
     }
 

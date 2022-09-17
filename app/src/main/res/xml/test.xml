@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cats-root>
+    <cat>
+        Барсик
+        <color>Полосатый</color>
+    </cat>
+    <cat>
+        Рыжик
+        <color>Рыжий</color>
+    </cat>
+</cats-root>

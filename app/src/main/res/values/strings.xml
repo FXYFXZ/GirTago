@@ -9,7 +9,7 @@
 
     <string name="menu_btn_day_before">назад</string>
     <string name="menu_btn_day_after">вперед</string>
-
+    <string name="sett_caption">Настройки</string>
 
 
 </resources>
