@@ -10,6 +10,9 @@
     <string name="menu_btn_day_before">назад</string>
     <string name="menu_btn_day_after">вперед</string>
     <string name="sett_caption">Настройки</string>
+    <string name="settlbLat">Широта</string>
+    <string name="settlbLong">Долгота</string>
+    <string name="settlbZone">Час.Пояс</string>
 
 
 </resources>

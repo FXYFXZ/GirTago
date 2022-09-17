@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -41,7 +42,7 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
             reCalcuate(); printDates()
             myClock.invalidate() // Update
         }
-
+        setHasOptionsMenu (true)
         return binding.root
     }
 
@@ -64,6 +65,12 @@ class ClockFragment : Fragment(R.layout.fragment_clock) {
         myClock = MyClock(activity)
         binding.clockContainer.addView(myClock)
     }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menu_settings).isVisible = true
+        return super.onPrepareOptionsMenu(menu)
+    }
+
 
     // Перерасчет всех необходимых величин для индикации
     private fun reCalcuate(){

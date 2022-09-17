@@ -25,19 +25,12 @@ class MainActivity : AppCompatActivity() {
         // что насчет сетпа
 //        val res = resources
 //        res.getXml(R.xml.test)
-
-
-
     }
 
     override fun onPause() {
         savePreferences()
         super.onPause()
 //        mainHandler.removeCallbacksAndMessages(null)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,7 +40,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.menu_settings -> gotoSettings()
+            R.id.menu_settings -> {
+                gotoSettings()
+              //  item.isVisible = false
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -70,8 +66,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-}
-// END CLASS
+} // END CLASS -------------------------------------------------------------------------------------
+
 
 
 

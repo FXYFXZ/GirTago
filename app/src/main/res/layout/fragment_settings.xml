@@ -10,61 +10,69 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:gravity="bottom"
-            android:text="Широта">
+            android:text="@string/settlbLat"
+            android:textSize="34sp">
         </TextView>
+
         <EditText
             android:id="@+id/fldAltitude"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textAlignment="center">
+            android:layout_weight="2"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            android:autofillHints=""
+            android:inputType="number"
+            tools:ignore="LabelFor">
         </EditText>
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:gravity="bottom"
-            android:text="Долгота">
+            android:text="@string/settlbLong"
+            android:textSize="34sp">
         </TextView>
+
         <EditText
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textAlignment="center">
+            android:layout_weight="2"
+            android:textAlignment="center"
+            android:textSize="34sp">
         </EditText>
+
     </TableRow>
 
     <TableRow>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:text="Временная зона">
+            android:layout_weight="3"
+            android:gravity="bottom"
+            android:text="@string/settlbZone"
+            android:textSize="34sp">
         </TextView>
-        <TextView
+
+        <EditText
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:textAlignment="center"
-            android:text="+3">
-        </TextView>
+            android:textSize="34sp">
+        </EditText>
 
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Switch
-            android:id="@+id/switch2"
+        <Button
+            android:id="@+id/btnZone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Следовать за луной">
-        </Switch>
+            android:text="Button" />
 
     </TableRow>
+
 
 
 </TableLayout>
