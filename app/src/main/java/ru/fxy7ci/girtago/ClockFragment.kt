@@ -1,7 +1,6 @@
 package ru.fxy7ci.girtago
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
